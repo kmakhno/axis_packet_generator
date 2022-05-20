@@ -18,7 +18,7 @@
 		output        start_packet_generator_o,
 		output [31:0] start_delay_o,
 		output [31:0] delay_between_packets_o,
-		output [31:0] packet_size_o,
+		output [31:0] packet_size_o, //in units word (4 bytes) per clock cycle
 		output [31:0] packets_num_o,
 		input         packet_generator_complete_i,
 		// User ports ends

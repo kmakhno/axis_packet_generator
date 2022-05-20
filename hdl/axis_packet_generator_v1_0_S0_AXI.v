@@ -249,8 +249,8 @@
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
-	                // Slave register 1
-	                slv_reg1[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+					// Slave register 1
+					slv_reg1[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
 	          3'h2:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
@@ -289,7 +289,9 @@
 	                    //   slv_reg5 <= slv_reg5;
 	                    end
 	        endcase
-	      end
+	      end else begin
+	           slv_reg0 <= 0;
+          end
 	  end
 	end    
 
@@ -427,14 +429,14 @@
 	// Add user logic here
 	wire start_packet_generator_strobe_d;
 
-	reg [1:0] start_packet_generator_sync_q;
+//	reg [1:0] start_packet_generator_sync_q;
 
-	always @(posedge S_AXI_ACLK) begin
-		if (!S_AXI_ARESETN)
-			start_packet_generator_sync_q <= 2'b00;
-		else
-			start_packet_generator_sync_q <= {start_packet_generator_sync_q[0], slv_reg0[0]};
-	end
+//	always @(posedge S_AXI_ACLK) begin
+//		if (!S_AXI_ARESETN)
+//			start_packet_generator_sync_q <= 2'b00;
+//		else
+//			start_packet_generator_sync_q <= {start_packet_generator_sync_q[0], slv_reg0[0]};
+//	end
 
 
 	always @(posedge S_AXI_ACLK) begin
@@ -446,12 +448,13 @@
 			slv_reg5 <= 1;
 	end
 
+    assign start_packet_generator_strobe_d = slv_reg0[0];
 	assign start_packet_generator_o        = slv_reg0[0];
 	assign start_delay_o                   = slv_reg1;
 	assign delay_between_packets_o         = slv_reg2;
 	assign packet_size_o                   = slv_reg3;
 	assign packets_num_o                   = slv_reg4;
-	assign start_packet_generator_strobe_d = (start_packet_generator_sync_q == 2'b01);
+	//assign start_packet_generator_strobe_d = (start_packet_generator_sync_q == 2'b01);
 	// User logic ends
 
 	endmodule

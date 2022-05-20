@@ -51,15 +51,15 @@
 	reg [31:0] delay_between_packets_cnt_q;
 	reg [31:0] clk_cnt_q;
 	reg [31:0] data_gen_q;
-	reg [1:0]  start_packet_generator_sync_q;
+	//reg [1:0]  start_packet_generator_sync_q;
 	reg        packet_generator_complete_q;
 
-	always @(posedge M_AXIS_ACLK) begin
-		if (!M_AXIS_ARESETN)
-			start_packet_generator_sync_q <= 2'b00;
-		else
-			start_packet_generator_sync_q <= {start_packet_generator_sync_q[0], start_packet_generator_i};
-	end
+//	always @(posedge M_AXIS_ACLK) begin
+//		if (!M_AXIS_ARESETN)
+//			start_packet_generator_sync_q <= 2'b00;
+//		else
+//			start_packet_generator_sync_q <= {start_packet_generator_sync_q[0], start_packet_generator_i};
+//	end
 
 	always @(posedge M_AXIS_ACLK) begin
 		if (!M_AXIS_ARESETN)
@@ -146,7 +146,7 @@
 		end
 	end
 
-	assign start_packet_generator_strobe_d = (start_packet_generator_sync_q == 2'b01);
+	assign start_packet_generator_strobe_d = start_packet_generator_i;//(start_packet_generator_sync_q == 2'b01);
 	assign packet_generator_complete_o = packet_generator_complete_q;
 	assign M_AXIS_TVALID = (state_q == P0);
 	assign M_AXIS_TLAST = (clk_cnt_q == packet_size_i-1);
